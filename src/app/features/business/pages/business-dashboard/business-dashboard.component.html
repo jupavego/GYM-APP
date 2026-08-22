@@ -1,0 +1,92 @@
+@if (loading()) {
+  <div class="dashboard-loading"><span class="spinner"></span></div>
+
+} @else if (!account()) {
+  <div class="panel">
+    <div class="panel-header">
+      <h1 class="panel-title">Mi cuenta</h1>
+    </div>
+    <div class="setup-notice">
+      <p>Todavía no has registrado tu cuenta.</p>
+      <a routerLink="/business/setup" class="btn-primary">Crear mi cuenta</a>
+    </div>
+  </div>
+
+} @else {
+  @if (account(); as a) {
+
+    <div class="dashboard">
+
+      <!-- Hero full width -->
+      <div class="dashboard-hero">
+        <div class="dashboard-hero__cover"
+          [style.background-image]="a.cover_url ? 'url(' + a.cover_url + ')' : null">
+          <div class="dashboard-hero__cover-overlay"></div>
+        </div>
+        <div class="dashboard-hero__body">
+          <div class="dashboard-hero__identity">
+            @if (a.logo_url) {
+              <img class="dashboard-hero__logo" [src]="a.logo_url" [alt]="a.name" />
+            } @else {
+              <div class="dashboard-hero__logo-placeholder">
+                {{ a.name.charAt(0).toUpperCase() }}
+              </div>
+            }
+            <div class="dashboard-hero__text">
+              <h1 class="dashboard-hero__name">{{ a.name }}</h1>
+              <span class="dashboard-hero__category">{{ a.category }}</span>
+            </div>
+          </div>
+          <div class="dashboard-hero__badge-wrap">
+            <div class="status-badge"
+              [class.status-badge--pending]="isPending"
+              [class.status-badge--approved]="isApproved"
+              [class.status-badge--rejected]="isRejected">
+              @if (isPending)  { <span class="status-badge__dot"></span> En revisión }
+              @if (isApproved) { <span class="status-badge__dot"></span> Activo }
+              @if (isRejected) { <span class="status-badge__dot"></span> Rechazado }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avisos -->
+      @if (isPending) {
+        <div class="dashboard-notice dashboard-notice--warning">
+          <svg class="dashboard-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Tu cuenta está en revisión. Quedará activa una vez sea aprobada.
+        </div>
+      }
+      @if (isRejected) {
+        <div class="dashboard-notice dashboard-notice--error">
+          <svg class="dashboard-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          Tu cuenta fue rechazada. Edita la información y contáctanos para una nueva revisión.
+        </div>
+      }
+
+      <!-- Acciones rápidas -->
+      <div class="dashboard-actions-col">
+        <div class="dashboard-actions">
+          <a routerLink="/business/account" class="action-card">
+            <div class="action-card__icon-wrap action-card__icon-wrap--purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </div>
+            <div class="action-card__content">
+              <span class="action-card__label">Editar perfil</span>
+              <span class="action-card__desc">Información, logo y portada</span>
+            </div>
+            <span class="action-card__arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  }
+}

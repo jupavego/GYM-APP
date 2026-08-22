@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  // Header sticky de una sola fila (~65px en todos los breakpoints
+  // con el rediseño actual — sin subbarra separada para móvil/desktop).
+  padding-top: 66px;
+
+  // Páginas sin header (auth/*): sin padding, el layout ocupa todo el viewport
+  &.no-chrome {
+    padding-top: 0;
+  }
+}

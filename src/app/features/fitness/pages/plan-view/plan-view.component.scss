@@ -1,0 +1,64 @@
+@use '../../../business/business.styles' as *;
+
+.fitness-session {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border-tertiary);
+
+  &:last-child { border-bottom: none; }
+}
+
+.fitness-session__title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 0.75rem;
+}
+
+.fitness-session__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+.fitness-session__name {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.fitness-session__detail {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.fitness-checkin-row {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--color-border-tertiary);
+
+  &:last-child { border-bottom: none; }
+}
+
+.fitness-checkin-row__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  margin-bottom: 0.35rem;
+}
+
+.fitness-checkin-row__action {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}

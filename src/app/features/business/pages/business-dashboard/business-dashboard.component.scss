@@ -1,0 +1,148 @@
+@use '../../business.styles' as *;
+@use 'styles/breakpoints' as *;
+
+// ── Contenedor principal ──────────────────────────────────────────────────────
+.dashboard {
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+// ── Hero — banner de identidad de la cuenta ───────────────────────────────────
+.dashboard-hero {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-tertiary);
+  box-shadow: 0 4px 24px rgba(var(--color-brand-primary-rgb), 0.08);
+
+  &__cover {
+    height: 160px;
+    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-light) 100%);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  &__cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(20, 14, 80, 0.45) 100%);
+  }
+
+  &__body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: linear-gradient(135deg, var(--color-brand-accent) 0%, #f0733a 45%, #f5956a 100%);
+  }
+
+  &__identity {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  &__logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 10px rgba(var(--color-brand-primary-rgb), 0.2);
+    flex-shrink: 0;
+  }
+
+  &__logo-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-light));
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(var(--color-brand-primary-rgb), 0.2);
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 0.15rem;
+    line-height: 1.2;
+  }
+
+  &__category {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+  }
+
+  &__badge-wrap { align-self: center; }
+}
+
+// ── Avisos de estado (pendiente / rechazado) ──────────────────────────────────
+.dashboard-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  line-height: 1.6;
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &--warning {
+    background: var(--color-background-warning);
+    color: #92400e;
+    border: 1px solid #fcd34d;
+  }
+
+  &--error {
+    background: var(--red-50);
+    color: var(--red-800);
+    border: 1px solid #fca5a5;
+  }
+}
+
+// ── Acciones rápidas ───────────────────────────────────────────────────────────
+.dashboard-actions-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@include respond-to($bp-md) {
+  .dashboard { padding: 1.25rem; }
+}
+
+@include respond-to($bp-xs) {
+  .dashboard { padding: 1rem; }
+}

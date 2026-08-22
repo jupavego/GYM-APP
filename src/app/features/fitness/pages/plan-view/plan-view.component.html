@@ -1,0 +1,72 @@
+@if (loading()) {
+  <div class="panel-loading"><span class="spinner"></span></div>
+} @else {
+
+  <div class="panel">
+    <div class="panel-header">
+      <h1 class="panel-title">Mi plan de entrenamiento</h1>
+      <a routerLink="/" class="btn-back">Volver</a>
+    </div>
+
+    @if (!plan()) {
+      <div class="setup-notice">
+        <p>Todavía no tienes un plan generado.</p>
+        <a routerLink="/fitness/questionnaire" class="btn-primary">Hacer el cuestionario</a>
+      </div>
+    } @else {
+      @if (plan(); as p) {
+
+        <section class="edit-section">
+          <div class="edit-section__header">
+            <h2 class="edit-section__title">
+              Plan activo — {{ p.plan.horizon_weeks }} semanas
+            </h2>
+            <a routerLink="/fitness/questionnaire" class="btn-back">Regenerar</a>
+          </div>
+
+          <div class="edit-section__body">
+            @for (session of p.sessions; track session.id) {
+              <div class="fitness-session">
+                <h3 class="fitness-session__title">{{ session.day_label }}</h3>
+                <ul class="fitness-session__list">
+                  @for (entry of session.exercises; track entry.exercise_id) {
+                    <li>
+                      <span class="fitness-session__name">{{ exerciseName(entry.exercise_id) }}</span>
+                      <span class="fitness-session__detail">{{ entry.sets }} × {{ entry.reps }} — descanso {{ entry.rest_sec }}s</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="edit-section">
+          <div class="edit-section__header">
+            <h2 class="edit-section__title">Check-in quincenal</h2>
+            <a routerLink="/fitness/checkin" class="btn-primary">Hacer check-in</a>
+          </div>
+
+          @if (history().length === 0) {
+            <p class="admin-page__empty">Aún no has hecho ningún check-in de este plan.</p>
+          } @else {
+            <div class="edit-section__body">
+              @for (item of history(); track item.checkin.id) {
+                <div class="fitness-checkin-row">
+                  <div class="fitness-checkin-row__meta">
+                    <span>{{ item.checkin.submitted_at | date:'dd/MM/yyyy' }}</span>
+                    <span>Dolor: {{ painLabel(item.checkin.q_pain) }}</span>
+                  </div>
+                  @if (item.adjustment) {
+                    <p class="fitness-checkin-row__action">{{ item.adjustment.action_taken }}</p>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </section>
+
+      }
+    }
+  </div>
+}

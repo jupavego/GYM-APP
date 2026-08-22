@@ -1,0 +1,101 @@
+<section class="setup-container">
+  <div class="setup-card">
+
+    @if (loading()) {
+      <div class="panel-loading"><span class="spinner"></span></div>
+    } @else if (noPlan()) {
+      <div class="setup-notice">
+        <p>Necesitas un plan activo para hacer el check-in.</p>
+        <a routerLink="/fitness/questionnaire" class="btn-primary">Generar mi plan</a>
+      </div>
+    } @else {
+
+      <div class="setup-header">
+        <h1 class="setup-title">Check-in quincenal</h1>
+        <p class="setup-subtitle">7 preguntas rápidas para ajustar tu plan si hace falta.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="setup-form" novalidate>
+
+        <div class="field-group">
+          <label class="field-label">¿Qué tan bien has podido cumplir tu rutina?</label>
+          <select formControlName="q_adherence" class="field-input">
+            <option [value]="1">1 — Muy difícil</option>
+            <option [value]="2">2 — Difícil</option>
+            <option [value]="3">3 — Regular</option>
+            <option [value]="4">4 — Bien</option>
+            <option [value]="5">5 — Excelente</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Cómo percibes tu energía?</label>
+          <select formControlName="q_energy" class="field-input">
+            <option [value]="1">1 — Muy baja</option>
+            <option [value]="2">2 — Baja</option>
+            <option [value]="3">3 — Normal</option>
+            <option [value]="4">4 — Buena</option>
+            <option [value]="5">5 — Muy buena</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Cómo percibes la dificultad de las rutinas?</label>
+          <select formControlName="q_difficulty" class="field-input">
+            <option [value]="1">1 — Muy fácil</option>
+            <option [value]="2">2 — Fácil</option>
+            <option [value]="3">3 — Adecuada</option>
+            <option [value]="4">4 — Difícil</option>
+            <option [value]="5">5 — Muy difícil</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Has tenido molestias o dolor durante los ejercicios?</label>
+          <select formControlName="q_pain" class="field-input">
+            <option value="none">No</option>
+            <option value="mild">Sí, leve</option>
+            <option value="moderate">Sí, moderado</option>
+            <option value="severe">Sí, importante</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Sientes que estás progresando hacia tu objetivo?</label>
+          <select formControlName="q_progress" class="field-input">
+            <option [value]="1">1 — Nada</option>
+            <option [value]="2">2 — Poco</option>
+            <option [value]="3">3 — Moderadamente</option>
+            <option [value]="4">4 — Bastante</option>
+            <option [value]="5">5 — Mucho</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Cuántos días por semana pudiste entrenar?</label>
+          <input formControlName="q_days_actual" type="number" min="0" max="7" class="field-input" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">¿Quieres mantener o modificar tu plan?</label>
+          <select formControlName="q_preference" class="field-input">
+            <option value="keep">Mantener</option>
+            <option value="tweak">Hacer pequeños cambios</option>
+            <option value="change">Cambiar el plan</option>
+          </select>
+        </div>
+
+        @if (errorMsg()) {
+          <div class="field-alert field-alert--error">{{ errorMsg() }}</div>
+        }
+
+        <button type="submit" class="btn-primary" [disabled]="saving()">
+          @if (saving()) { <span class="btn-spinner"></span> Enviando... }
+          @else { Enviar check-in }
+        </button>
+
+      </form>
+    }
+
+  </div>
+</section>

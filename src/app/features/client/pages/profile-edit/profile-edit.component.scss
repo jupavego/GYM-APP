@@ -1,0 +1,42 @@
+@use '../../client.styles' as *;
+@use '../../../business/business.styles' as *;
+
+.membership-card {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border-tertiary);
+  background: var(--color-background-secondary);
+
+  &--active {
+    border-color: var(--color-border-success);
+    background: var(--color-background-success);
+  }
+}
+
+.membership-card__status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.membership-card__text {
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+}
+
+.membership-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+
+  &--active {
+    background: var(--color-background-success);
+    color: var(--color-text-success);
+  }
+}

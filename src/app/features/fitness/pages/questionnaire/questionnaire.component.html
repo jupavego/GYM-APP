@@ -1,0 +1,120 @@
+<section class="setup-container">
+  <div class="setup-card">
+
+    @if (loading()) {
+      <div class="panel-loading"><span class="spinner"></span></div>
+    } @else {
+
+      <div class="setup-header">
+        <h1 class="setup-title">Tu plan de entrenamiento</h1>
+        <p class="setup-subtitle">
+          Cuéntanos sobre ti y generamos un plan personalizado. Puedes retomar este
+          cuestionario cuando quieras — se genera un plan nuevo cada vez.
+        </p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="setup-form" novalidate>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Edad</label>
+            <input formControlName="age" type="number" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Sexo</label>
+            <select formControlName="sex" class="field-input">
+              <option value="male">Masculino</option>
+              <option value="female">Femenino</option>
+              <option value="other">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Peso (kg)</label>
+            <input formControlName="weight_kg" type="number" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Altura (cm)</label>
+            <input formControlName="height_cm" type="number" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Objetivo principal</label>
+            <select formControlName="goal_primary" class="field-input">
+              @for (g of goals; track g[0]) {
+                <option [value]="g[0]">{{ g[1] }}</option>
+              }
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Objetivo secundario (opcional)</label>
+            <select formControlName="goal_secondary" class="field-input">
+              <option value="">Ninguno</option>
+              @for (g of goals; track g[0]) {
+                <option [value]="g[0]">{{ g[1] }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Nivel de experiencia</label>
+          <select formControlName="experience_level" class="field-input">
+            @for (e of experiences; track e[0]) {
+              <option [value]="e[0]">{{ e[1] }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Días disponibles por semana</label>
+            <input formControlName="days_available" type="number" min="1" max="7" class="field-input" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Duración por sesión (min)</label>
+            <input formControlName="session_duration_min" type="number" min="15" max="180" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Horizonte del plan</label>
+            <select formControlName="horizon" class="field-input">
+              <option value="short">Corto (4 semanas)</option>
+              <option value="medium">Medio (8 semanas)</option>
+              <option value="long">Largo (12 semanas)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Preferencia horaria</label>
+            <select formControlName="time_preference" class="field-input">
+              <option value="morning">Mañana</option>
+              <option value="afternoon">Tarde</option>
+              <option value="evening">Noche</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+        </div>
+
+        @if (errorMsg()) {
+          <div class="field-alert field-alert--error">{{ errorMsg() }}</div>
+        }
+
+        <button type="submit" class="btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="btn-spinner"></span> Generando tu plan...
+          } @else {
+            Generar mi plan
+          }
+        </button>
+
+      </form>
+    }
+
+  </div>
+</section>

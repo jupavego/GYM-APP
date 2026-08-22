@@ -1,0 +1,258 @@
+@use 'styles/breakpoints' as *;
+
+// ── Contenedor raíz — barra sticky de ancho completo ──────────────────────────
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-navbar);
+  transition: transform var(--duration-slow) var(--ease-default);
+
+  &--hidden {
+    transform: translateY(-100%);
+  }
+}
+
+// ── Barra ─────────────────────────────────────────────────────────────────────
+.topbar__glass {
+  background: rgba(5, 30, 26, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.topbar__contenedor {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.topbar__inner {
+  width: 100%;
+  padding: 0.9rem clamp(1rem, 3vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+// ── Logo ──────────────────────────────────────────────────────────────────────
+.logo {
+  display: flex;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+}
+
+// ── Navegación de anclas (desktop) ──────────────────────────────────────────
+.nav-anclas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  a {
+    position: relative;
+    text-decoration: none;
+    color: rgba(255, 255, 255, .78);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    font-family: var(--font-body);
+    transition: color var(--duration-normal);
+    padding-bottom: 3px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: var(--color-warm-primary);
+      transition: width var(--duration-normal);
+    }
+
+    &:hover {
+      color: #ffffff;
+      &::after { width: 100%; }
+    }
+  }
+}
+
+// ── Acciones desktop ──────────────────────────────────────────────────────────
+.acciones-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  white-space: nowrap;
+  font-family: var(--font-body);
+
+  a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, .85);
+    font-weight: 600;
+    font-size: 0.82rem;
+    transition: color var(--duration-normal);
+    &:hover { color: #fff; }
+  }
+
+  .separador { display: none; }
+}
+
+// CTA sólido — "Únete" (desktop y móvil)
+.btn-header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-warm-primary) !important;
+  color: var(--deep-900) !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-weight: 700 !important;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: 0.78rem !important;
+  letter-spacing: var(--tracking-wide);
+  transition: transform var(--duration-fast), opacity var(--duration-fast);
+
+  &:hover { transform: translateY(-1px); opacity: 0.9; color: var(--deep-900) !important; }
+}
+
+// ── Botón hamburguesa ─────────────────────────────────────────────────────────
+.btn-hamburguesa {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+
+  .hamburguesa-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+
+    span {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      width: 20px;
+      background: #ffffff;
+      border-radius: 1px;
+      transform-origin: center;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+
+      &:nth-child(1) { top: 0; }
+      &:nth-child(2) { top: 6px; }
+      &:nth-child(3) { top: 12px; }
+    }
+  }
+
+  &--abierto .hamburguesa-icon {
+    span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  }
+}
+
+// ── Menú móvil ────────────────────────────────────────────────────────────────
+.menu-movil {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: rgba(5, 30, 26, 0.98);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  z-index: calc(var(--z-navbar) - 1);
+
+  // Estado cerrado
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition:
+    opacity   var(--duration-slow) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--duration-slow) cubic-bezier(0.22, 1, 0.36, 1);
+
+  // Estado abierto
+  &--abierto {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+  }
+
+  &__scroll {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 0.5rem 0 1.25rem;
+  }
+
+  &__item {
+    transition:
+      opacity   0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .menu-movil--abierto & {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &__acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    padding: 1rem 1.5rem 0.5rem;
+    font-family: var(--font-body);
+
+    a {
+      text-decoration: none;
+      color: rgba(255, 255, 255, .85);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      transition: color var(--duration-normal);
+      &:hover { color: #ffffff; }
+    }
+
+    .btn-registro {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-warm-primary);
+      color: var(--deep-900);
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@include respond-to($bp-nav) {
+  .nav-anclas       { display: none; }
+  .acciones-header  { display: none; }
+
+  .btn-hamburguesa {
+    display: flex;
+  }
+}

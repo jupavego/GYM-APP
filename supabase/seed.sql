@@ -1,0 +1,17 @@
+-- ============================================================
+-- seed.sql
+-- Datos iniciales — plantilla base
+-- IMPORTANTE: ejecutar SOLO en desarrollo o proyecto nuevo.
+-- NO ejecutar en producción si ya existen usuarios.
+-- ============================================================
+
+-- ── Crear usuario admin inicial ──────────────────────────────
+-- El primer usuario administrador debe crearse directamente
+-- desde el Supabase Dashboard:
+--   Dashboard → Authentication → Users → Invite user
+--
+-- Luego asignar el rol 'admin' manualmente:
+--   Dashboard → Table Editor → profiles → editar el registro
+--   y cambiar role a 'admin'.
+--
+-- NUNCA incluir credenciales en este archivo.
