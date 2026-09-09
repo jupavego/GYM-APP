@@ -794,6 +794,17 @@
   }
 }
 
+// La franja de carga usa las mismas proporciones que en desktop si no se
+// ajusta — demasiado alta para el hero recortado de móvil, y tapa los
+// botones del CTA. Se reduce en proporción al ancho disponible. Este
+// bloque va DESPUÉS de las reglas base de .load-strip a propósito: misma
+// especificidad, así que el orden en la hoja decide, no el media query.
 @include respond-to($bp-sm) {
-  .load-strip { display: none; } // sobra ruido visual en móvil
+  .load-strip { height: 44px; }
+  .load-strip__text { font-size: 0.7rem; }
+}
+
+@include respond-to($bp-xs) {
+  .load-strip { height: 36px; }
+  .load-strip__text { font-size: 0.6rem; letter-spacing: var(--tracking-wide); }
 }
