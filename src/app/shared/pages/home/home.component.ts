@@ -67,9 +67,9 @@ const SERVICES: GymService[] = [
 ];
 
 const STATS: StatItem[] = [
-  { value: '10+',  label: 'Años de experiencia' },
-  { value: '500+', label: 'Miembros activos' },
-  { value: '15',   label: 'Instructores certificados' },
+  { value: '10+', label: 'Años de experiencia' },
+  { value: '20+', label: 'Miembros activos' },
+  { value: '✓',   label: 'Instructores certificados' },
 ];
 
 @Component({
@@ -133,27 +133,29 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       occupied.set(key(start.q, start.r), start);
       clusterOrder.push(start);
 
-      let anchorIdx = 0;
-      while (clusterOrder.length < count) {
-        let anchor = clusterOrder[anchorIdx];
-        let free = dirs
+      const freeNeighborsOf = (idx: number) => {
+        const anchor = clusterOrder[idx];
+        return dirs
           .map(([dq, dr], dirIdx) => ({ dirIdx, q: anchor.q + dq, r: anchor.r + dr }))
           .filter(p => !occupied.has(key(p.q, p.r)));
+      };
 
-        // Si el hexágono inmediatamente anterior ya no tiene espacio libre,
-        // se busca el candidato más reciente (de ESTE enjambre) que sí
-        // tenga — sigue creciendo cerca de lo último construido.
-        let tries = 0;
-        while (!free.length && tries < clusterOrder.length) {
-          anchorIdx = (anchorIdx + 1) % clusterOrder.length;
-          anchor = clusterOrder[anchorIdx];
-          free = dirs
-            .map(([dq, dr], dirIdx) => ({ dirIdx, q: anchor.q + dq, r: anchor.r + dr }))
-            .filter(p => !occupied.has(key(p.q, p.r)));
-          tries++;
+      // Crecimiento tipo "coral": en cada paso se elige al azar CUALQUIER
+      // celda ya dibujada que todavía tenga espacio libre alrededor (no
+      // siempre la más reciente). Extender siempre desde la última creaba
+      // una sola "serpiente" que podía recorrer una diagonal larga y salir
+      // por completo del área visible, dejando zonas visibles sin cubrir
+      // mientras seguía creciendo donde ya no se ve. Así la mancha crece
+      // compacta y redondeada, repartida alrededor de lo ya construido.
+      while (clusterOrder.length < count) {
+        const growable: number[] = [];
+        for (let i = 0; i < clusterOrder.length; i++) {
+          if (freeNeighborsOf(i).length) growable.push(i);
         }
-        if (!free.length) break; // este enjambre quedó saturado, se corta ahí
+        if (!growable.length) break; // este enjambre quedó saturado, se corta ahí
 
+        const anchorIdx = growable[Math.floor(Math.random() * growable.length)];
+        const free = freeNeighborsOf(anchorIdx);
         const pick = free[Math.floor(Math.random() * free.length)];
         // Vista desde el hijo, la arista compartida queda en la dirección
         // opuesta a la usada para llegar a él.
@@ -161,7 +163,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         const cell: Cell = { q: pick.q, r: pick.r, startVertexIndex: edgeVertexPairs[childDirIdx][0] };
         occupied.set(key(cell.q, cell.r), cell);
         clusterOrder.push(cell);
-        anchorIdx = clusterOrder.length - 1;
       }
       return clusterOrder;
     };
