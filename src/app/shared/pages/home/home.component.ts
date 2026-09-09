@@ -166,7 +166,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return clusterOrder;
     };
 
-    const targetCount = 60;
+    // En móvil se generan menos hexágonos — menos nodos que animar en un
+    // dispositivo con menos CPU/batería disponible.
+    const isMobileViewport = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const targetCount = isMobileViewport ? 26 : 60;
     // La FORMA del enjambre se genera libre (rama orgánica, sin restringir
     // dirección) desde el centro para buena cobertura.
     const shape = growCluster(0, 0, targetCount);
@@ -379,10 +382,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // La red de hexágonos está oculta en móvil (mismo corte que $bp-sm) —
-    // no tiene sentido correr el loop de animación para algo que no se ve.
+    // prefers-reduced-motion sigue desactivando todo por accesibilidad. En
+    // móvil ya NO se apaga la red — se dibuja igual, solo que con menos
+    // hexágonos (ver buildHexSwarm) y a menor fps para cuidar batería/CPU.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const polys = this.el.nativeElement.querySelectorAll('.hex-network__hex') as NodeListOf<SVGPolygonElement>;
     const nodeGroups = this.el.nativeElement.querySelectorAll('.hex-network__node-group') as NodeListOf<SVGGElement>;
@@ -397,8 +401,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Rendimiento: un bamboleo con ciclos de 30-70s no necesita recalcularse
     // a 60fps — a ~24fps la diferencia es imperceptible y el trabajo por
-    // fotograma baja más de la mitad.
-    const FRAME_INTERVAL = 1000 / 24;
+    // fotograma baja más de la mitad. En móvil se baja aún más.
+    const FRAME_INTERVAL = 1000 / (isMobile ? 12 : 24);
     let lastFrameTime = 0;
 
     this.ngZone.runOutsideAngular(() => {

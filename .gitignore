@@ -71,3 +71,5 @@ __pycache__/
 # no son parte del proyecto ni deben compartirse vía el repo.
 /.claude/skills/
 /.claude/plugins/
+.vercel
+.env*
