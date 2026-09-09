@@ -152,7 +152,7 @@
       left: 0;
       height: 2px;
       width: 20px;
-      background: #ffffff;
+      background: var(--color-brand-primary);
       border-radius: 1px;
       transform-origin: center;
       transition: transform 0.28s ease, opacity 0.28s ease;

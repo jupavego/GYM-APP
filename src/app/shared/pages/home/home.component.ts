@@ -344,7 +344,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           baseY: v.y,
           dirX: Math.cos(angle),
           dirY: Math.sin(angle),
-          maxAmp: scaledSize * (0.03 + Math.random() * 0.03), // margen de deformación -50% -50%
+          maxAmp: scaledSize * (0.015 + Math.random() * 0.015), // margen de deformación -50% -50% -50%
           freq: (2 * Math.PI) / period,
           readyAt: finishTime,
           liveX: v.x,

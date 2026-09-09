@@ -7,7 +7,7 @@
        uno a la vez y queda permanente. Tras construirse, cada vértice
        bambolea por su cuenta (vía rAF en el componente) — ángulos vivos. -->
   <div class="hex-network" aria-hidden="true">
-    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
       @for (hex of hexGrid; track $index) {
         <polygon
           [attr.points]="hex.points"
