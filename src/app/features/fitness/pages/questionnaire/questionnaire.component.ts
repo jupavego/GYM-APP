@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FitnessProfileService } from '../../../../core/services/fitness/fitness-profile.service';
 import { PlanGeneratorService } from '../../../../core/services/fitness/plan-generator.service';
-import { GOAL_LABELS, EXPERIENCE_LABELS, FitnessProfileInput } from '../../../../core/models/fitness.model';
+import { GOAL_LABELS, EXPERIENCE_LABELS, WEEKDAY_LABELS, FitnessProfileInput } from '../../../../core/models/fitness.model';
 
 @Component({
   selector: 'app-questionnaire',
@@ -22,10 +22,12 @@ export class QuestionnaireComponent implements OnInit {
 
   readonly goals       = Object.entries(GOAL_LABELS) as [string, string][];
   readonly experiences  = Object.entries(EXPERIENCE_LABELS) as [string, string][];
+  readonly weekdayLabels = WEEKDAY_LABELS;
 
   loading   = signal(true);
   saving    = signal(false);
   errorMsg  = signal<string | null>(null);
+  selectedWeekdays = signal<number[]>([]);
 
   form = this.fb.group({
     age:                   [25, [Validators.required, Validators.min(12), Validators.max(100)]],
@@ -41,10 +43,23 @@ export class QuestionnaireComponent implements OnInit {
     time_preference:         ['flexible', Validators.required],
   });
 
+  get daysAvailable(): number {
+    return this.form.controls.days_available.value ?? 0;
+  }
+
+  toggleWeekday(day: number): void {
+    this.selectedWeekdays.update(days => {
+      if (days.includes(day)) return days.filter(d => d !== day);
+      if (days.length >= this.daysAvailable) return days; // no deja marcar más de los días disponibles
+      return [...days, day].sort();
+    });
+  }
+
   async ngOnInit(): Promise<void> {
     const existing = await this.profileService.getMine();
     if (existing) {
       this.form.patchValue({ ...existing, goal_secondary: existing.goal_secondary ?? '' });
+      this.selectedWeekdays.set(existing.preferred_weekdays ?? []);
     }
     this.loading.set(false);
   }
@@ -55,6 +70,11 @@ export class QuestionnaireComponent implements OnInit {
       return;
     }
 
+    if (this.selectedWeekdays().length !== this.daysAvailable) {
+      this.errorMsg.set(`Marca exactamente ${this.daysAvailable} día(s) — llevas ${this.selectedWeekdays().length}.`);
+      return;
+    }
+
     this.saving.set(true);
     this.errorMsg.set(null);
 
@@ -62,6 +82,7 @@ export class QuestionnaireComponent implements OnInit {
     const input: FitnessProfileInput = {
       ...raw,
       goal_secondary: raw.goal_secondary ? raw.goal_secondary as any : null,
+      preferred_weekdays: this.selectedWeekdays(),
     } as FitnessProfileInput;
 
     const saveResult = await this.profileService.save(input);

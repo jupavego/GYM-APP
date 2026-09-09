@@ -1,9 +1,10 @@
 // ============================================================
 // styles/_tokens.scss
-// Design tokens — APEX FITNESS
-// Paleta fitness-tech: verde muy oscuro (base), cian (color de
-// marca), lima neón (acento de alto impacto para CTAs), gris
-// claro azulado (superficies/texto sobre oscuro).
+// Design tokens — FULL BODY
+// Paleta corporativa: chartreuse (único acento de marca / CTA)
+// sobre gris fibra de carbono (fondos oscuros, hero) y blanco
+// (superficies claras) — monocromo + un solo acento, sin colores
+// secundarios de marca.
 //
 // Jerarquía:
 //   1. Paleta global (valores crudos)
@@ -15,54 +16,42 @@
 
 :root {
 
-  // ── PALETA GLOBAL — Cyan (color de marca principal) ─────────
-  --cyan-50:  #f0f9ff;
-  --cyan-100: #e0f2fe;
-  --cyan-200: #bae6fd;
-  --cyan-300: #7dd3fc;
-  --cyan-400: #38bdf8;
-  --cyan-500: #0ea5e9;
-  --cyan-600: #0284c7;
-  --cyan-700: #0369a1;
-  --cyan-800: #075985;
-  --cyan-900: #0c4a6e;
+  // ── PALETA GLOBAL — Chartreuse (único acento de marca / CTA) ─
+  --chartreuse-50:  #fcfee5;
+  --chartreuse-100: #f7fcc2;
+  --chartreuse-200: #eef890;
+  --chartreuse-300: #e2f250;
+  --chartreuse-400: #d8ec20;
+  --chartreuse-500: #d1e800; // Chartreuse Corporativo — valor de marca exacto
+  --chartreuse-600: #a8bb00;
+  --chartreuse-700: #7f8f00;
+  --chartreuse-800: #5c6800;
+  --chartreuse-900: #3d4500;
 
-  // ── PALETA GLOBAL — Lime (acento de alto impacto / CTA) ──────
-  --lime-50:  #f7fee7;
-  --lime-100: #ecfccb;
-  --lime-200: #d9f99d;
-  --lime-300: #bef264;
-  --lime-400: #a3e635;
-  --lime-500: #84cc16;
-  --lime-600: #65a30d;
-  --lime-700: #4d7c0f;
-  --lime-800: #3f6212;
-  --lime-900: #365314;
+  // ── PALETA GLOBAL — Deep (gris fibra de carbono, fondos hero) ─
+  --deep-50:  #f6f6f7;
+  --deep-100: #e9e9eb;
+  --deep-200: #d3d4d6;
+  --deep-300: #acaeb2;
+  --deep-400: #7e8085;
+  --deep-500: #57585d;
+  --deep-600: #3f4045;
+  --deep-700: #2b2c30;
+  --deep-800: #1c1d20;
+  --deep-900: #121214; // gris fibra de carbono — carbon fiber
 
-  // ── PALETA GLOBAL — Deep (verde muy oscuro, fondos hero) ─────
-  --deep-50:  #eef5f3;
-  --deep-100: #d7e8e3;
-  --deep-200: #b0d1c7;
-  --deep-300: #7fb3a3;
-  --deep-400: #4d8f7a;
-  --deep-500: #2c6b56;
-  --deep-600: #1a4d3c;
-  --deep-700: #123a2d;
-  --deep-800: #0a2921;
-  --deep-900: #051e1a;
-
-  // ── PALETA GLOBAL — Neutral (gris azulado frío) ──────────────
+  // ── PALETA GLOBAL — Neutral (blanco → gris fibra de carbono) ─
   --neutral-0:   #ffffff;
-  --neutral-50:  #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cbd5e1;
-  --neutral-400: #94a3b8;
-  --neutral-500: #64748b;
-  --neutral-600: #475569;
-  --neutral-700: #334155;
-  --neutral-800: #1e293b;
-  --neutral-900: #0f172a;
+  --neutral-50:  #f6f6f7;
+  --neutral-100: #e9e9eb;
+  --neutral-200: #d3d4d6;
+  --neutral-300: #acaeb2;
+  --neutral-400: #7e8085;
+  --neutral-500: #57585d;
+  --neutral-600: #3f4045;
+  --neutral-700: #2b2c30;
+  --neutral-800: #1c1d20;
+  --neutral-900: #121214;
 
   // ── PALETA GLOBAL — Green (éxito) ────────────────────────────
   --green-50:  #f0fdf4;
@@ -100,25 +89,25 @@
   // ALIAS SEMÁNTICOS — MARCA
   // ================================================================
 
-  // Primario — Cyan (botones, focus, links, badges, sidebar)
-  --color-brand-primary:     var(--cyan-500);
-  --color-brand-primary-rgb: 14, 165, 233;
-  --color-brand-light:       var(--cyan-400);
-  --color-brand-light-rgb:   56, 189, 248;
-  --color-brand-dark:        var(--cyan-700);
-  --color-brand-border:      var(--cyan-200);
-  --color-brand-surface:     var(--cyan-50);
+  // Primario — Chartreuse (botones, focus, links, badges, sidebar)
+  --color-brand-primary:     var(--chartreuse-500);
+  --color-brand-primary-rgb: 209, 232, 0;
+  --color-brand-light:       var(--chartreuse-400);
+  --color-brand-light-rgb:   216, 236, 32;
+  --color-brand-dark:        var(--chartreuse-700);
+  --color-brand-border:      var(--chartreuse-200);
+  --color-brand-surface:     var(--chartreuse-50);
 
-  // Acento de alto impacto — Lime (CTA principal, subrayados activos)
-  --color-warm-primary:      var(--lime-400);
-  --color-warm-light:        var(--lime-300);
-  --color-warm-dark:         var(--lime-600);
-  --color-warm-border:       var(--lime-200);
-  --color-warm-surface:      var(--lime-50);
-  --color-brand-accent:      var(--lime-400);
-  --color-brand-accent-rgb:  163, 230, 53;
+  // Acento de alto impacto — mismo Chartreuse (CTA principal, subrayados activos)
+  --color-warm-primary:      var(--chartreuse-500);
+  --color-warm-light:        var(--chartreuse-400);
+  --color-warm-dark:         var(--chartreuse-700);
+  --color-warm-border:       var(--chartreuse-200);
+  --color-warm-surface:      var(--chartreuse-50);
+  --color-brand-accent:      var(--chartreuse-500);
+  --color-brand-accent-rgb:  209, 232, 0;
 
-  // Hero — gradiente verde muy oscuro
+  // Hero — gradiente gris fibra de carbono
   --color-hero-bg-deep:   var(--deep-900);
   --color-hero-bg-mid:    var(--deep-800);
   --color-hero-bg-light:  var(--deep-600);
@@ -165,8 +154,8 @@
   // TIPOGRAFÍA
   // ================================================================
 
-  --font-heading: 'Oswald', sans-serif;
-  --font-body:    'Inter', sans-serif;
+  --font-heading: 'Kanit', sans-serif;
+  --font-body:    'Lato', sans-serif;
 
   // Escala de tamaños (base 16px, ratio 1.25 Major Third)
   --text-xs:   0.75rem;    // 12px  — labels, captions
@@ -234,15 +223,15 @@
   // ELEVACIÓN (sombras)
   // ================================================================
 
-  --shadow-xs:  0 1px 3px rgba(5, 30, 26, .08);
-  --shadow-sm:  0 2px 8px rgba(5, 30, 26, .10);
-  --shadow-md:  0 4px 16px rgba(5, 30, 26, .12);
-  --shadow-lg:  0 8px 32px rgba(5, 30, 26, .16);
-  --shadow-xl:  0 16px 48px rgba(5, 30, 26, .20);
-  --shadow-2xl: 0 24px 64px rgba(5, 30, 26, .26);
+  --shadow-xs:  0 1px 3px rgba(0, 0, 0, .08);
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, .10);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, .12);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, .16);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, .20);
+  --shadow-2xl: 0 24px 64px rgba(0, 0, 0, .26);
 
-  // Sombra de color para el CTA principal (lima)
-  --shadow-cta-lime: 0 8px 24px rgba(163, 230, 53, .45);
+  // Sombra de color para el CTA principal (chartreuse)
+  --shadow-cta-lime: 0 8px 24px rgba(209, 232, 0, .45);
 
   // Sombras de brand — botones y estados de foco
   --shadow-brand-sm:  0 2px 8px rgba(var(--color-brand-primary-rgb), 0.25);

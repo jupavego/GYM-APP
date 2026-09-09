@@ -14,6 +14,7 @@ Ejecutar los archivos de `migrations/` en el SQL Editor de Supabase, en este ord
 005_stats_function.sql  → función SQL para las métricas del panel admin
 006_memberships.sql     → tabla de membresías/licencias de clientes (activación manual por admin)
 007_fitness_engine.sql  → motor de recomendación de rutinas (perfil, ejercicios, templates, planes, check-in)
+008_fitness_schedule.sql → días de la semana preferidos (para el cronograma del plan)
 seed.sql                → solo en proyecto nuevo (opcional)
 seed-exercises.sql      → 1,324 ejercicios (solo texto, ver nota de licencia dentro del archivo)
 seed-templates.sql      → 5 plantillas base de rutina (full body, upper/lower, PPL, fuerza)

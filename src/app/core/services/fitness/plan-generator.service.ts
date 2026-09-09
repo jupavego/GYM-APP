@@ -5,7 +5,7 @@ import { ExerciseService } from './exercise.service';
 import { TemplateMatcherService } from './template-matcher.service';
 import {
   ExperienceLevel, FitnessProfile, Goal, PlanExerciseEntry,
-  PlanSession, WorkoutPlan,
+  PlanSession, ScheduleEntry, WorkoutPlan,
 } from '../../models/fitness.model';
 
 export interface GeneratedPlan {
@@ -117,5 +117,38 @@ export class PlanGeneratorService {
       .order('day_index', { ascending: true });
 
     return { plan, sessions: (sessionRows ?? []) as PlanSession[] };
+  }
+
+  // Cronograma — determinístico, no se almacena. Recorre día a día desde
+  // start_date por horizon_weeks*7 días; cuando el día de la semana está
+  // en preferredWeekdays, asigna la siguiente sesión en rotación cíclica
+  // (las sesiones ya vienen ordenadas por day_index).
+  buildSchedule(plan: WorkoutPlan, sessions: PlanSession[], preferredWeekdays: number[]): ScheduleEntry[] {
+    if (!sessions.length || !preferredWeekdays.length) return [];
+
+    const entries: ScheduleEntry[] = [];
+    const totalDays = plan.horizon_weeks * 7;
+    const start = this.parseDate(plan.start_date);
+
+    let sessionCursor = 0;
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(start);
+      date.setDate(date.getDate() + i);
+
+      // JS: 0=domingo..6=sábado → ISO: 0=lunes..6=domingo
+      const isoWeekday = (date.getDay() + 6) % 7;
+
+      if (preferredWeekdays.includes(isoWeekday)) {
+        entries.push({ date, session: sessions[sessionCursor % sessions.length] });
+        sessionCursor++;
+      }
+    }
+
+    return entries;
+  }
+
+  private parseDate(dateStr: string): Date {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d);
   }
 }

@@ -31,6 +31,34 @@
                 <ul class="fitness-session__list">
                   @for (entry of session.exercises; track entry.exercise_id) {
                     <li>
+                      <span class="fitness-session__icon">
+                        @switch (exerciseIcon(entry.exercise_id)) {
+                          @case ('chest') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-2-8-5-8-10a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5-4 8-8 10z"/></svg>
+                          }
+                          @case ('back') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18M6 8h12M6 16h12"/></svg>
+                          }
+                          @case ('legs') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8l-3 10h4l2-8 2 8h4l-3-10V3"/></svg>
+                          }
+                          @case ('shoulders') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a4 4 0 0 1 8 0M12 10a4 4 0 0 1 8 0M4 10v4M20 10v4"/></svg>
+                          }
+                          @case ('arms') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11"/><path d="M21 21l-1-1"/><path d="M3 3l1 1"/><path d="M18 22l4-4"/><path d="M2 6l4-4"/></svg>
+                          }
+                          @case ('core') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="3"/><path d="M6 10h12M6 14h12"/></svg>
+                          }
+                          @case ('cardio') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+                          }
+                          @case ('neck') {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M12 9v12"/></svg>
+                          }
+                        }
+                      </span>
                       <span class="fitness-session__name">{{ exerciseName(entry.exercise_id) }}</span>
                       <span class="fitness-session__detail">{{ entry.sets }} × {{ entry.reps }} — descanso {{ entry.rest_sec }}s</span>
                     </li>
@@ -38,6 +66,26 @@
                 </ul>
               </div>
             }
+          </div>
+        </section>
+
+        <section class="edit-section">
+          <div class="edit-section__header">
+            <h2 class="edit-section__title">Cronograma</h2>
+          </div>
+
+          <div class="edit-section__body">
+            @if (schedule().length > 0) {
+              <p class="fitness-schedule__summary">
+                {{ schedule().length }} sesiones programadas en {{ p.plan.horizon_weeks }} semanas —
+                próxima: {{ schedule()[0].session.day_label }} el {{ schedule()[0].date | date:'dd/MM/yyyy' }}
+              </p>
+            }
+            <app-plan-calendar
+              [entries]="schedule()"
+              [startDate]="startDate()"
+              [horizonWeeks]="p.plan.horizon_weeks"
+            />
           </div>
         </section>
 

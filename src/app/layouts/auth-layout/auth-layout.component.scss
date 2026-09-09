@@ -15,13 +15,8 @@
 .auth-sidebar {
   width: 400px;
   flex-shrink: 0;
-  // Mismo gradiente que el header pill, pero en columna
-  background: linear-gradient(160deg,
-    #5c42df                0%,
-    rgba(var(--color-brand-primary-rgb), .92) 40%,
-    rgba(var(--color-brand-primary-rgb), .75) 70%,
-    rgba(249, 115, 22, .65) 100%
-  );
+  // Mismo gradiente gris fibra de carbono que el hero de home
+  background: var(--color-hero-gradient);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -50,7 +45,7 @@
   &__bubble--2 {
     width: 180px; height: 180px;
     left: -60px; top: 30%;
-    background: rgba(249, 115, 22, .12);
+    background: rgba(var(--color-brand-primary-rgb), .14);
   }
 
   &__bubble--3 {
@@ -187,10 +182,10 @@
   // Se usa min-height para que el flex se estire con el sidebar
   min-height: 100vh;
   padding: 2.5rem 2rem;
-  // Fondo con textura suave: color crema claro + patrón de puntos sutil
-  background-color: #f2f0f9;
+  // Fondo con textura suave: gris muy claro + patrón de puntos chartreuse sutil
+  background-color: var(--color-page-bg);
   background-image:
-    radial-gradient(circle, rgba(var(--color-brand-primary-rgb), .07) 1px, transparent 1px);
+    radial-gradient(circle, rgba(var(--color-brand-primary-rgb), .16) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

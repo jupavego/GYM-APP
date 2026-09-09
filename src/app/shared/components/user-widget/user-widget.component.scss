@@ -25,7 +25,7 @@
 
   &:hover,
   &--open {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--uw-hover-bg, rgba(255, 255, 255, 0.12));
   }
 
   // ── Avatar ──────────────────────────────────────────────────────────────
@@ -40,7 +40,7 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      border: 2px solid var(--uw-avatar-border, rgba(255, 255, 255, 0.3));
       display: block;
     }
   }
@@ -49,17 +49,15 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: var(--uw-initial-bg, rgba(255, 255, 255, 0.2));
+    border: 2px solid var(--uw-avatar-border, rgba(255, 255, 255, 0.3));
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 0.9rem;
-    color: #ffffff;
-    
-    
+    color: var(--uw-initial-color, #ffffff);
   }
 
   // Bolita verde de online
@@ -89,7 +87,7 @@
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--uw-name-color, #ffffff);
 
     max-width: 200px;
     overflow: hidden;
@@ -101,14 +99,14 @@
     font-family: var(--font-body);
     font-size: 0.7rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--uw-role-color, rgba(255, 255, 255, 0.65));
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
 
   // ── Chevron ──────────────────────────────────────────────────────────────
   &__chevron {
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--uw-role-color, rgba(255, 255, 255, 0.65));
     transition: transform var(--duration-normal);
     flex-shrink: 0;
   }

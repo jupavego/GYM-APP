@@ -7,9 +7,9 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const SITE = {
-  name:        'APEX FITNESS',
-  tagline:     'Entrena. Supera. Repite.',
-  description: 'Gimnasio de alto rendimiento con entrenadores certificados, clases grupales y planes de suscripción flexibles.',
+  name:        'FULL BODY',
+  tagline:     'Todo tu cuerpo. Todo tu potencial.',
+  description: 'Un entrenamiento completo para desarrollar tu cuerpo, potenciar tu rendimiento y superar tus límites.',
   location:    '',
 
   contact: {

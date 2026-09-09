@@ -81,6 +81,23 @@
           </div>
         </div>
 
+        <div class="field-group">
+          <label class="field-label">
+            ¿Qué días puedes entrenar? — marca {{ daysAvailable }}
+          </label>
+          <div class="weekday-selector">
+            @for (label of weekdayLabels; track $index) {
+              <button
+                type="button"
+                class="weekday-btn"
+                [class.weekday-btn--active]="selectedWeekdays().includes($index)"
+                (click)="toggleWeekday($index)"
+              >{{ label }}</button>
+            }
+          </div>
+          <span class="field-hint">{{ selectedWeekdays().length }} de {{ daysAvailable }} seleccionados</span>
+        </div>
+
         <div class="field-row">
           <div class="field-group">
             <label class="field-label">Horizonte del plan</label>

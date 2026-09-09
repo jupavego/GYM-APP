@@ -16,7 +16,7 @@
 
 // ── Barra ─────────────────────────────────────────────────────────────────────
 .topbar__glass {
-  background: rgba(5, 30, 26, 0.92);
+  background: rgba(18, 18, 20, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, .08);
@@ -65,11 +65,11 @@
     position: relative;
     text-decoration: none;
     color: rgba(255, 255, 255, .78);
-    font-weight: 600;
-    font-size: 0.8rem;
+    font-weight: 700;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
-    font-family: var(--font-body);
+    font-family: var(--font-heading);
     transition: color var(--duration-normal);
     padding-bottom: 3px;
 
@@ -176,7 +176,7 @@
   left: 0;
   top: 100%;
   width: 100%;
-  background: rgba(5, 30, 26, 0.98);
+  background: rgba(18, 18, 20, 0.98);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, .08);
@@ -220,12 +220,12 @@
     align-items: flex-start;
     gap: 1.1rem;
     padding: 1rem 1.5rem 0.5rem;
-    font-family: var(--font-body);
+    font-family: var(--font-heading);
 
     a {
       text-decoration: none;
       color: rgba(255, 255, 255, .85);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: var(--tracking-wide);

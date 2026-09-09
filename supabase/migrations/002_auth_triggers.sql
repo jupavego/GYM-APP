@@ -9,6 +9,11 @@
 -- crea automáticamente su fila correspondiente en public.profiles.
 -- Lee el rol y el nombre desde raw_user_meta_data que el cliente
 -- envía en el signUp({ options: { data: { role, full_name } } }).
+-- SEC-001 | OWASP A01:2021 — Broken Access Control
+-- El rol viene de raw_user_meta_data, que el cliente controla
+-- directamente en la llamada a signUp(). Sin whitelist, cualquiera
+-- puede autoregistrarse como 'admin' llamando la API de Supabase
+-- Auth directo (sin pasar por la UI de la app).
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE PLPGSQL
@@ -19,10 +24,11 @@ BEGIN
   INSERT INTO public.profiles (id, role, full_name)
   VALUES (
     NEW.id,
-    COALESCE(
-      (NEW.raw_user_meta_data ->> 'role')::user_role,
-      'client'
-    ),
+    CASE
+      WHEN NEW.raw_user_meta_data ->> 'role' IN ('client', 'business')
+      THEN (NEW.raw_user_meta_data ->> 'role')::user_role
+      ELSE 'client'
+    END,
     NEW.raw_user_meta_data ->> 'full_name'
   )
   ON CONFLICT (id) DO NOTHING;  -- idempotente si se llama dos veces

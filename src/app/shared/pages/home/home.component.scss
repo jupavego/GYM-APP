@@ -2,16 +2,25 @@
 
 // ── Utilidades compartidas de sección ─────────────────────────────────────────
 .section-eyebrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--color-brand-primary);
-  margin-bottom: var(--space-3);
+  background: var(--deep-900);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-4);
 
-  &--inverse { color: var(--color-warm-primary); }
+  // Sobre fondos ya oscuros (ej. Planes): chip translúcido en vez de sólido
+  &--inverse {
+    color: var(--color-warm-primary);
+    background: rgba(var(--color-brand-primary-rgb), .12);
+    border: 1px solid rgba(var(--color-brand-primary-rgb), .35);
+  }
 }
 
 .section-title {
@@ -47,7 +56,7 @@
   box-shadow: var(--shadow-cta-lime);
   transition: transform var(--duration-fast), box-shadow var(--duration-fast);
 
-  &:hover  { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(163, 230, 53, .55); }
+  &:hover  { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(209, 232, 0, .55); }
   &:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 }
 
@@ -91,12 +100,72 @@
   height: 60vw;
   max-width: 700px;
   max-height: 700px;
-  background: radial-gradient(circle, rgba(163, 230, 53, 0.18) 0%, rgba(163, 230, 53, 0) 70%);
+  background: radial-gradient(circle, rgba(209, 232, 0, 0.18) 0%, rgba(209, 232, 0, 0) 70%);
   pointer-events: none;
+  z-index: 0;
+}
+
+// ── Red de hexágonos nodales — enjambre orgánico, permanente ─────────────────
+// Cada hexágono nace de un vértice del anterior (cero traslapes por
+// construcción). Se traza lado a lado de a uno (estrictamente en fila),
+// consolida con un destello al cerrar el trazo, y AHÍ SE QUEDA — una sola
+// pasada, no se desvanece ni reinicia. Tras construirse, cada vértice
+// bambolea por su cuenta vía JS (ver ngAfterViewInit) — eso vuelve
+// irregulares los ángulos del hexágono, dándole vida al conjunto.
+.hex-network {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  svg { width: 100%; height: 100%; }
+}
+
+.hex-network__hex {
+  fill: none;
+  stroke: var(--color-brand-primary);
+  stroke-width: 1.3;
+  stroke-dashoffset: var(--perimeter, 240px);
+  opacity: 0;
+  animation-name: hex-build;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.hex-network__node {
+  fill: var(--color-brand-primary);
+  opacity: 0;
+  animation-name: hex-node-pulse;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+// 0-70%: se traza lado a lado, lento. 70-85%: destello de consolidación al
+// cerrar el trazo. 100%: se queda ahí, con un brillo tenue permanente.
+@keyframes hex-build {
+  0%   { stroke-dashoffset: var(--perimeter, 240px); opacity: 0;   filter: drop-shadow(0 0 0 rgba(var(--color-brand-primary-rgb), 0)); }
+  3%   { opacity: .5; } // visible casi de inmediato, aunque el trazo completo siga lento
+  70%  { stroke-dashoffset: 0;   opacity: .55; }
+  80%  { filter: drop-shadow(0 0 8px rgba(var(--color-brand-primary-rgb), .9)); }
+  100% { stroke-dashoffset: 0;   opacity: .5;  filter: drop-shadow(0 0 2px rgba(var(--color-brand-primary-rgb), .25)); }
+}
+
+@keyframes hex-node-pulse {
+  0%, 65% { opacity: 0; }
+  78%     { opacity: 1; filter: drop-shadow(0 0 6px rgba(var(--color-brand-primary-rgb), .95)); }
+  100%    { opacity: .75; filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-network__hex  { animation: none; opacity: .3; stroke-dashoffset: 0; }
+  .hex-network__node { animation: none; opacity: .45; }
 }
 
 .hero__inner {
   position: relative;
+  z-index: 2;
   max-width: 720px;
   text-align: center;
   display: flex;
@@ -105,9 +174,9 @@
 }
 
 .hero__eyebrow {
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--color-warm-primary);
@@ -117,7 +186,8 @@
 .hero__title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 7vw, 4.5rem);
-  font-weight: 700;
+  font-weight: 800;
+  font-style: italic;
   text-transform: uppercase;
   letter-spacing: var(--tracking-tight);
   line-height: 1.05;
@@ -127,7 +197,8 @@
 
 .hero__desc {
   font-size: var(--text-md);
-  color: var(--neutral-300);
+  font-weight: 700;
+  color: var(--neutral-200);
   line-height: var(--leading-relaxed);
   max-width: 540px;
   margin: 0 0 var(--space-8);
@@ -163,29 +234,72 @@
 
 .nosotros__stats {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  border-left: 3px solid var(--color-warm-primary);
-  padding-left: var(--space-8);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
 }
 
 .stat-block {
   display: flex;
   flex-direction: column;
+  background: var(--deep-900);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-5);
 }
 
 .stat-block__value {
   font-family: var(--font-heading);
-  font-size: var(--text-4xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-brand-primary);
   line-height: 1;
 }
 
 .stat-block__label {
   font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  margin-top: var(--space-1);
+  color: var(--neutral-400);
+  margin-top: var(--space-2);
+}
+
+// ── Tile especial: aro circular al 100% ──────────────────────────────────────
+.stat-block--ring {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+
+  .stat-block__label { margin-top: var(--space-3); }
+}
+
+.stat-ring {
+  position: relative;
+  width: 68px;
+  height: 68px;
+
+  svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+  circle {
+    fill: none;
+    stroke-width: 8;
+  }
+
+  &__track   { stroke: rgba(255, 255, 255, .14); }
+  &__progress {
+    stroke: var(--color-brand-primary);
+    stroke-linecap: round;
+    stroke-dasharray: 213.6;
+    stroke-dashoffset: 0;
+  }
+
+  &__value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+  }
 }
 
 // ═══════════════════════════════════ SERVICIOS ══════════════════════════════
@@ -229,7 +343,7 @@
   width: 52px;
   height: 52px;
   border-radius: var(--radius-md);
-  background: var(--color-brand-surface);
+  background: var(--deep-900);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -450,7 +564,7 @@
     width: 20px;
     height: 20px;
     flex-shrink: 0;
-    color: var(--color-brand-primary);
+    color: var(--color-brand-dark);
   }
 }
 
@@ -462,17 +576,15 @@
 
 // ── Responsive ────────────────────────────────────────────────────────────────
 @include respond-to($bp-md) {
+  .load-strip__text { font-size: 0.85rem; }
+
   .nosotros__inner,
   .contacto__inner {
     grid-template-columns: 1fr;
   }
 
   .nosotros__stats {
-    border-left: none;
-    border-top: 3px solid var(--color-warm-primary);
-    padding-left: 0;
-    padding-top: var(--space-6);
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -480,4 +592,209 @@
   .hero { min-height: auto; padding: 2.5rem 1.25rem 3rem; }
   .nosotros, .servicios, .planes, .contacto { padding: var(--space-16) 1.25rem; }
   .nosotros__stats { grid-template-columns: 1fr; }
+  .hex-network { display: none; } // el loop de JS también se salta en móvil
+}
+
+// ═══════════════════════════ FRANJA DE CARGA (hero) ═══════════════════════════
+// Carga de 0→100% al entrar/recargar la página, de extremo a extremo al pie
+// del hero. El texto se va coloreando de izquierda a derecha en sincronía
+// con el relleno — temblor sutil mientras carga, destello al consolidar.
+.load-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62px; // +20% sobre 52px
+  z-index: 2;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-strip__track {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, .05);
+  border-top: 1px solid rgba(255, 255, 255, .1);
+}
+
+.load-strip__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  background-color: var(--color-brand-primary); // sólido, sin transparencia
+  // Red de nodos orgánica como textura de fondo — mismo criterio de malla
+  // sutil (líneas + puntos en las intersecciones) usado en el banner de
+  // Presencia ICBF, recoloreada al gris fibra de carbono de la marca.
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='100' viewBox='0 0 240 100'%3E%3Cg stroke='%23121214' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cline x1='0' y1='0' x2='70' y2='35'/%3E%3Cline x1='25' y1='15' x2='95' y2='10'/%3E%3Cline x1='70' y1='35' x2='130' y2='65'/%3E%3Cline x1='95' y1='10' x2='145' y2='45'/%3E%3Cline x1='145' y1='45' x2='180' y2='12'/%3E%3Cline x1='180' y1='12' x2='215' y2='38'/%3E%3Cline x1='215' y1='38' x2='240' y2='0'/%3E%3Cline x1='0' y1='0' x2='15' y2='80'/%3E%3Cline x1='25' y1='15' x2='55' y2='60'/%3E%3Cline x1='55' y1='60' x2='110' y2='88'/%3E%3Cline x1='70' y1='35' x2='110' y2='88'/%3E%3Cline x1='130' y1='65' x2='165' y2='90'/%3E%3Cline x1='145' y1='45' x2='200' y2='68'/%3E%3Cline x1='200' y1='68' x2='165' y2='90'/%3E%3Cline x1='200' y1='68' x2='240' y2='100'/%3E%3Cline x1='215' y1='38' x2='240' y2='100'/%3E%3Cline x1='25' y1='15' x2='70' y2='35'/%3E%3Cline x1='70' y1='35' x2='180' y2='12'/%3E%3Cline x1='15' y1='80' x2='55' y2='60'/%3E%3Cline x1='130' y1='65' x2='200' y2='68'/%3E%3Cline x1='15' y1='80' x2='0' y2='100'/%3E%3Cline x1='110' y1='88' x2='0' y2='100'/%3E%3C/g%3E%3Cg fill='%23121214' fill-opacity='0.24'%3E%3Ccircle cx='0' cy='0' r='3.2'/%3E%3Ccircle cx='240' cy='0' r='3.2'/%3E%3Ccircle cx='0' cy='100' r='3.2'/%3E%3Ccircle cx='240' cy='100' r='3.2'/%3E%3Ccircle cx='25' cy='15' r='2.3'/%3E%3Ccircle cx='70' cy='35' r='3.2'/%3E%3Ccircle cx='95' cy='10' r='1.8'/%3E%3Ccircle cx='145' cy='45' r='2.7'/%3E%3Ccircle cx='180' cy='12' r='2.3'/%3E%3Ccircle cx='215' cy='38' r='2.7'/%3E%3Ccircle cx='15' cy='80' r='2.7'/%3E%3Ccircle cx='55' cy='60' r='2.3'/%3E%3Ccircle cx='110' cy='88' r='3.2'/%3E%3Ccircle cx='130' cy='65' r='1.8'/%3E%3Ccircle cx='165' cy='90' r='2.7'/%3E%3Ccircle cx='200' cy='68' r='2.3'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 168px 70px;
+  transition: width 0.05s linear;
+}
+
+// Borde brillante en la punta del relleno — estela de luz difuminada
+.load-strip__edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-brand-primary);
+  filter: blur(3px) drop-shadow(0 0 8px rgba(var(--color-brand-primary-rgb), .9));
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: left 0.05s linear;
+}
+
+.load-strip--charging .load-strip__edge { opacity: 1; }
+
+.load-strip__content {
+  position: relative;
+  z-index: 1;
+}
+
+.load-strip__text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.37rem; // +30% sobre 1.05rem
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.load-strip__text--base {
+  color: rgba(255, 255, 255, .18);
+}
+
+.load-strip__text--fill {
+  position: absolute;
+  inset: 0;
+  color: var(--deep-900); // gris fibra de carbono — mejor contraste sobre el chartreuse sólido
+}
+
+// Temblor durante la carga — inestabilidad de máxima potencia (sutil)
+@keyframes load-strip-tremor {
+  0%, 100% { transform: translateY(0); }
+  20%      { transform: translateY(-0.6px); }
+  40%      { transform: translateY(0.5px); }
+  60%      { transform: translateY(-0.5px); }
+  80%      { transform: translateY(0.6px); }
+}
+
+.load-strip--charging { animation: load-strip-tremor 0.11s infinite; }
+
+// Consolidación al 100% — flash + barrido de luz hacia adelante, por ENCIMA
+// del relleno sólido (un box-shadow del contenedor quedaría tapado por los
+// hijos opacos, por eso van como capas propias con z-index alto).
+.load-strip__flash {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes load-strip-flash {
+  0%   { opacity: 0; }
+  15%  { opacity: .8; }
+  100% { opacity: 0; }
+}
+
+.load-strip--complete .load-strip__flash {
+  animation: load-strip-flash 0.5s ease-out forwards;
+}
+
+.load-strip__sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -48%;
+  width: 48%;
+  background: linear-gradient(100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, .5) 30%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, .5) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, .8));
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+
+// Segundo barrido, más angosto y con un pequeño retraso — doble destello
+.load-strip__sweep--secondary {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -22%;
+  width: 18%;
+  background: linear-gradient(100deg,
+    rgba(var(--color-brand-primary-rgb), 0) 0%,
+    rgba(255, 255, 255, .9) 50%,
+    rgba(var(--color-brand-primary-rgb), 0) 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@keyframes load-strip-sweep {
+  0%   { left: -48%; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { left: 115%; opacity: 0; }
+}
+
+@keyframes load-strip-sweep-secondary {
+  0%   { left: -22%; opacity: 0; }
+  15%  { opacity: 0; }
+  25%  { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { left: 115%; opacity: 0; }
+}
+
+.load-strip--complete .load-strip__sweep {
+  animation: load-strip-sweep 0.85s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+.load-strip--complete .load-strip__sweep--secondary {
+  animation: load-strip-sweep-secondary 0.95s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+// Brillo superior permanente — una vez consolidada, la franja queda con un
+// filo de luz arriba, como un reflejo fijo sobre vidrio o metal pulido.
+.load-strip__sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .35), rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+}
+
+.load-strip--complete .load-strip__sheen {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .load-strip--charging,
+  .load-strip--complete .load-strip__flash,
+  .load-strip--complete .load-strip__sweep,
+  .load-strip--complete .load-strip__sweep--secondary {
+    animation: none !important;
+  }
+}
+
+@include respond-to($bp-sm) {
+  .load-strip { display: none; } // sobra ruido visual en móvil
 }

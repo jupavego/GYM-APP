@@ -25,6 +25,26 @@ export const EXPERIENCE_LABELS: Record<ExperienceLevel, string> = {
   advanced:     'Avanzado',
 };
 
+// 0=lunes..6=domingo (ISO) — mismo orden que preferred_weekdays
+export const WEEKDAY_LABELS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+export const WEEKDAY_LABELS_FULL = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+// body_part del dataset de ejercicios → ícono a usar en la UI (@switch en plan-view).
+export type BodyPartIcon = 'chest' | 'back' | 'legs' | 'shoulders' | 'arms' | 'core' | 'cardio' | 'neck';
+
+export const BODY_PART_ICON: Record<string, BodyPartIcon> = {
+  chest:        'chest',
+  back:         'back',
+  'upper legs': 'legs',
+  'lower legs': 'legs',
+  shoulders:    'shoulders',
+  'upper arms': 'arms',
+  'lower arms': 'arms',
+  waist:        'core',
+  cardio:       'cardio',
+  neck:         'neck',
+};
+
 export interface FitnessProfile {
   id: string;
   client_id: string;
@@ -36,6 +56,7 @@ export interface FitnessProfile {
   goal_secondary: Goal | null;
   experience_level: ExperienceLevel;
   days_available: number;
+  preferred_weekdays: number[]; // 0=lunes..6=domingo (ISO), length === days_available
   session_duration_min: number;
   horizon: Horizon;
   time_preference: TimePreference;
@@ -110,6 +131,13 @@ export interface PlanSession {
   day_label: string;
   day_index: number;
   exercises: PlanExerciseEntry[];
+}
+
+// Cronograma — calculado en el servicio a partir de start_date +
+// horizon_weeks + preferred_weekdays, no se almacena en DB.
+export interface ScheduleEntry {
+  date: Date;
+  session: PlanSession;
 }
 
 export type PainLevel = 'none' | 'mild' | 'moderate' | 'severe';

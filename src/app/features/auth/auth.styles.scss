@@ -51,7 +51,7 @@
 // Enlace dentro del formulario (ej. recuperar contraseña)
 .field-link {
   font-size: 0.8125rem;
-  color: var(--color-brand-primary);
+  color: var(--color-brand-dark);
   text-decoration: none;
   font-weight: 500;
 
@@ -153,7 +153,7 @@
 }
 
 .auth-link {
-  color: var(--color-brand-primary);
+  color: var(--color-brand-dark);
   text-decoration: none;
   font-weight: 600;
 
@@ -170,10 +170,10 @@
   color: var(--color-text-secondary);
   font-size: 0.9375rem;
 
-  // Spinner morado en lugar del blanco
+  // Spinner de marca en lugar del blanco
   .spinner {
-    border-color: rgba(var(--color-brand-primary-rgb), 0.2);
-    border-top-color: var(--color-brand-primary);
+    border-color: rgba(var(--color-brand-primary-rgb), 0.25);
+    border-top-color: var(--color-brand-dark);
   }
 }
 

@@ -135,6 +135,18 @@
 
 .dash-topbar__spacer { flex: 1; }
 
+// El user-widget se diseñó para el header oscuro del sitio (texto blanco
+// hardcodeado con fallback) — aquí el topbar es claro, así que se
+// sobreescriben sus variables de color para que se vea sobre fondo claro.
+.dash-topbar app-user-widget {
+  --uw-hover-bg: var(--color-background-secondary);
+  --uw-avatar-border: var(--color-border-primary);
+  --uw-initial-bg: var(--color-brand-surface);
+  --uw-initial-color: var(--color-brand-primary);
+  --uw-name-color: var(--color-text-primary);
+  --uw-role-color: var(--color-text-tertiary);
+}
+
 .dash-topbar__menu-btn {
   display: none;
   align-items: center;

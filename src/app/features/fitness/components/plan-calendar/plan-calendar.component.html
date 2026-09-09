@@ -1,0 +1,35 @@
+@if (months().length === 0) {
+  <p class="calendar-empty">No hay cronograma para mostrar todavía.</p>
+} @else {
+  <div class="calendar-months">
+    @for (m of months(); track m.year + '-' + m.month) {
+      <div class="calendar-month">
+        <h4 class="calendar-month__title">{{ m.label }}</h4>
+
+        <div class="calendar-grid calendar-grid--header">
+          <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+
+        @for (week of m.weeks; track $index) {
+          <div class="calendar-grid">
+            @for (day of week; track $index) {
+              <div
+                class="calendar-day"
+                [class.calendar-day--empty]="!day.date"
+                [class.calendar-day--training]="day.isTrainingDay"
+                [class.calendar-day--today]="day.isToday"
+              >
+                @if (day.date) {
+                  <span class="calendar-day__number">{{ day.date.getDate() }}</span>
+                  @if (day.sessionLabel) {
+                    <span class="calendar-day__label">{{ day.sessionLabel }}</span>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

@@ -32,7 +32,7 @@
   &__cover-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(20, 14, 80, 0.45) 100%);
+    background: linear-gradient(to bottom, transparent 40%, rgba(18, 18, 20, 0.45) 100%);
   }
 
   &__body {
@@ -42,7 +42,7 @@
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    background: linear-gradient(135deg, var(--color-brand-accent) 0%, #f0733a 45%, #f5956a 100%);
+    background: linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand-primary) 50%, var(--color-brand-light) 100%);
   }
 
   &__identity {

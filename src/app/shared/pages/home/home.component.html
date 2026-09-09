@@ -1,6 +1,36 @@
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <section id="inicio" class="hero">
   <div class="hero__glow" aria-hidden="true"></div>
+
+  <!-- Red de hexágonos nodales — enjambre orgánico: cada uno nace de un
+       vértice del hexágono anterior (cero traslapes garantizados), se traza
+       uno a la vez y queda permanente. Tras construirse, cada vértice
+       bambolea por su cuenta (vía rAF en el componente) — ángulos vivos. -->
+  <div class="hex-network" aria-hidden="true">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+      @for (hex of hexGrid; track $index) {
+        <polygon
+          [attr.points]="hex.points"
+          [attr.stroke-dasharray]="hex.perimeter"
+          class="hex-network__hex"
+          [style.--perimeter.px]="hex.perimeter"
+          [style.animation-delay]="hex.buildDelay"
+          [style.animation-duration]="hex.buildDuration"
+        />
+        <g class="hex-network__node-group">
+          @for (v of hex.vertices; track v.key) {
+            <circle
+              [attr.cx]="v.x" [attr.cy]="v.y" r="2.2"
+              class="hex-network__node"
+              [style.animation-delay]="hex.buildDelay"
+              [style.animation-duration]="hex.buildDuration"
+            />
+          }
+        </g>
+      }
+    </svg>
+  </div>
+
   <div class="hero__inner">
     <span class="hero__eyebrow">Bienvenido a {{ site.name }}</span>
     <h1 class="hero__title">
@@ -12,14 +42,39 @@
       <button type="button" class="btn-cta-outline" (click)="scrollTo('planes')">Ver planes</button>
     </div>
   </div>
+
+  <!-- Franja de carga — de extremo a extremo, al pie del hero, guiño a "Full Body" -->
+  <div
+    class="load-strip"
+    [class.load-strip--charging]="gaugeCharging()"
+    [class.load-strip--complete]="gaugeCharged()"
+    aria-hidden="true"
+  >
+    <div class="load-strip__track"></div>
+    <div class="load-strip__fill" [style.width.%]="gaugePercent()"></div>
+    <div class="load-strip__edge" [style.left.%]="gaugePercent()"></div>
+
+    <div class="load-strip__content">
+      <span class="load-strip__text load-strip__text--base">{{ gaugePercent() }}% &middot; FULL BODY</span>
+      <span
+        class="load-strip__text load-strip__text--fill"
+        [style.clip-path]="'inset(0 ' + (100 - gaugePercent()) + '% 0 0)'"
+      >{{ gaugePercent() }}% &middot; FULL BODY</span>
+    </div>
+
+    <div class="load-strip__sheen"></div>
+    <div class="load-strip__flash"></div>
+    <div class="load-strip__sweep"></div>
+    <div class="load-strip__sweep--secondary"></div>
+  </div>
 </section>
 
 <!-- ═══════════════════════════════ NOSOTROS ═══════════════════════════════ -->
 <section id="nosotros" class="nosotros">
   <div class="nosotros__inner">
-    <div class="nosotros__text">
+    <div class="nosotros__text" appScrollReveal>
       <span class="section-eyebrow">Nosotros</span>
-      <h2 class="section-title">Entrenamiento con propósito, resultados reales.</h2>
+      <h2 class="section-title scroll-reveal--track" appScrollReveal>Entrenamiento con propósito, resultados reales.</h2>
       <p class="nosotros__desc">
         En {{ site.name }} combinamos entrenadores certificados, equipos de última
         generación y una comunidad que te empuja a superarte. No importa si estás
@@ -33,12 +88,24 @@
     </div>
 
     <div class="nosotros__stats">
-      @for (stat of stats; track stat.label) {
-        <div class="stat-block">
+      @for (stat of stats; track stat.label; let i = $index) {
+        <div class="stat-block scroll-reveal--pop" appScrollReveal [revealDelay]="i * 100">
           <span class="stat-block__value">{{ stat.value }}</span>
           <span class="stat-block__label">{{ stat.label }}</span>
         </div>
       }
+
+      <!-- Aro circular al 100% — guiño al nombre "Full Body" -->
+      <div class="stat-block stat-block--ring scroll-reveal--pop" appScrollReveal [revealDelay]="stats.length * 100">
+        <div class="stat-ring" aria-hidden="true">
+          <svg viewBox="0 0 80 80">
+            <circle class="stat-ring__track" cx="40" cy="40" r="34" />
+            <circle class="stat-ring__progress" cx="40" cy="40" r="34" />
+          </svg>
+          <span class="stat-ring__value">100%</span>
+        </div>
+        <span class="stat-block__label">Compromiso Full Body</span>
+      </div>
     </div>
   </div>
 </section>
@@ -46,14 +113,14 @@
 <!-- ═══════════════════════════════ SERVICIOS ═══════════════════════════════ -->
 <section id="servicios" class="servicios">
   <div class="servicios__inner">
-    <div class="servicios__header">
+    <div class="servicios__header" appScrollReveal>
       <span class="section-eyebrow">Servicios</span>
-      <h2 class="section-title">Todo lo que necesitas para entrenar</h2>
+      <h2 class="section-title scroll-reveal--track" appScrollReveal>Todo lo que necesitas para entrenar</h2>
     </div>
 
     <div class="servicios__grid">
-      @for (service of services; track service.title) {
-        <div class="service-card">
+      @for (service of services; track service.title; let i = $index) {
+        <div class="service-card scroll-reveal--pop" appScrollReveal [revealDelay]="i * 90">
           <div class="service-card__icon">
             @switch (service.icon) {
               @case ('dumbbell') {
@@ -81,15 +148,15 @@
 <!-- ═══════════════════════════════ PLANES ═══════════════════════════════ -->
 <section id="planes" class="planes">
   <div class="planes__inner">
-    <div class="planes__header">
+    <div class="planes__header" appScrollReveal>
       <span class="section-eyebrow section-eyebrow--inverse">Planes</span>
-      <h2 class="section-title section-title--inverse">Elige tu membresía</h2>
+      <h2 class="section-title section-title--inverse scroll-reveal--track" appScrollReveal>Elige tu membresía</h2>
       <p class="planes__subtitle">Sin permanencia forzosa. Cambia o cancela cuando quieras.</p>
     </div>
 
     <div class="planes__grid">
-      @for (plan of plans; track plan.id) {
-        <div class="plan-card" [class.plan-card--featured]="plan.featured">
+      @for (plan of plans; track plan.id; let i = $index) {
+        <div class="plan-card scroll-reveal--pop" [class.plan-card--featured]="plan.featured" appScrollReveal [revealDelay]="i * 90">
           @if (plan.featured) {
             <span class="plan-card__badge">Más elegido</span>
           }
@@ -119,9 +186,9 @@
 <!-- ═══════════════════════════════ CONTACTO ═══════════════════════════════ -->
 <section id="contacto" class="contacto">
   <div class="contacto__inner">
-    <div class="contacto__info">
+    <div class="contacto__info" appScrollReveal>
       <span class="section-eyebrow">Contacto</span>
-      <h2 class="section-title">¿Listo para empezar?</h2>
+      <h2 class="section-title scroll-reveal--track" appScrollReveal>¿Listo para empezar?</h2>
       <p class="contacto__desc">
         Escríbenos y te ayudamos a elegir el plan ideal para tus objetivos.
       </p>
@@ -148,7 +215,7 @@
       </ul>
     </div>
 
-    <form class="contacto__form" novalidate>
+    <form class="contacto__form scroll-reveal--pop" appScrollReveal [revealDelay]="150" novalidate>
       <div class="field-group">
         <label class="field-label">Nombre</label>
         <input type="text" class="field-input" placeholder="Tu nombre" />
